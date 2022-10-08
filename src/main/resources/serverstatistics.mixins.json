@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.vicious.serverstatistics.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "serverstatistics.refmap.json",
+  "mixins": [
+    "MixinServerPlayer",
+    "MixinSyncableGlobalData"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
