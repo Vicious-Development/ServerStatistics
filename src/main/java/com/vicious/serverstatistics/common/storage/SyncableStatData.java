@@ -17,37 +17,36 @@ import java.util.UUID;
 
 public class SyncableStatData extends SyncableCompound {
     @Obscured
-    public SyncableDataTable<AchievementData> achievers = new SyncableDataTable<>("achievers",AchievementData::new);
+    public SyncableDataTable<AdvancementData> advancers = new SyncableDataTable<>("achievers", AdvancementData::new);
     @ReadOnly
     public SyncableStatsCounter counter = new SyncableStatsCounter("stats");
 
     public SyncableStatData(String key) {
         super(key);
-        achievers.supports(AchievementData::getKey,ResourceLocation.class);
+        advancers.supports(AdvancementData::getKey,ResourceLocation.class);
     }
 
-    private AchievementData ensureExists(ResourceLocation rl){
-        AchievementData achievements = achievers.get(rl);
+    private AdvancementData ensureExists(ResourceLocation rl){
+        AdvancementData achievements = advancers.get(rl);
         if(achievements == null){
-            achievements = new AchievementData(rl);
+            achievements = new AdvancementData(rl);
         }
-        achievers.add(achievements);
+        advancers.add(achievements);
         return achievements;
     }
 
     @SubscribeEvent
     public void achieve(AdvancementEvent.AdvancementEarnEvent event){
         if(event.getEntity() instanceof ServerPlayer sp){
-            ensureExists(event.getAdvancement().getId()).achieve(sp);
+            ensureExists(event.getAdvancement().getId()).achieve(sp,event.getAdvancement());
         }
     }
     @SubscribeEvent
     public void revoke(AdvancementEvent.AdvancementProgressEvent event){
         if(event.getProgressType() == AdvancementEvent.AdvancementProgressEvent.ProgressType.REVOKE) {
             if (event.getEntity() instanceof ServerPlayer sp) {
-                ensureExists(event.getAdvancement().getId()).revoke(sp);
+                ensureExists(event.getAdvancement().getId()).revoke(sp,event.getAdvancement());
             }
-
         }
     }
     public Set<UUID> getAchievers(ResourceLocation rl){
