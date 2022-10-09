@@ -15,6 +15,11 @@ public class MixinServerPlayer {
         ServerStatistics.getData().awardStat(stat,value,asSP());
     }
 
+    @Inject(method = "resetStat",at = @At("HEAD"))
+    public void resetGlobal(Stat<?> stat, CallbackInfo ci) {
+        ServerStatistics.getData().resetStat(stat,asSP());
+    }
+
     private ServerPlayer asSP(){
         return ServerPlayer.class.cast(this);
     }

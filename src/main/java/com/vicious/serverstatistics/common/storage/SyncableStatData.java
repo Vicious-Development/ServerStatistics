@@ -1,6 +1,6 @@
 package com.vicious.serverstatistics.common.storage;
 
-import com.vicious.serverstatistics.common.event.StatAwardedEvent;
+import com.vicious.serverstatistics.common.event.StatChangedEvent;
 import com.vicious.viciouscore.aunotamation.isyncablecompoundholder.annotation.Obscured;
 import com.vicious.viciouscore.aunotamation.isyncablecompoundholder.annotation.ReadOnly;
 import com.vicious.viciouscore.common.data.implementations.SyncableDataTable;
@@ -57,12 +57,17 @@ public class SyncableStatData extends SyncableCompound {
     public void awardStat(Stat<?> stat, int value, ServerPlayer player) {
         //It might be possible for time related statistics to exceed the maximum integer limit. For this reason I find it important to put a safe guard in.
         //This would really only occur of many players were constantly online, adding their maximum playtime together and producing enormous numbers.
-        if(counter.getValue().getValue(stat) < Integer.MAX_VALUE-1) {
-            StatAwardedEvent sae = new StatAwardedEvent(value,stat,player);
+        int statVal = counter.getValue().getValue(stat);
+        if(statVal < Integer.MAX_VALUE-1) {
+            StatChangedEvent sae = new StatChangedEvent(value,stat,player);
             MinecraftForge.EVENT_BUS.post(sae);
             if(!sae.isCanceled()) {
                 counter.getValue().increment(null, stat, value);
             }
         }
+    }
+
+    public void resetStat(Stat<?> stat, ServerPlayer player) {
+        awardStat(stat, -counter.getValue().getValue(stat),player);
     }
 }

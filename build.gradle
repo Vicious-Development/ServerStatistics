@@ -117,10 +117,29 @@ jar {
     }
 }
 
-jar.finalizedBy('reobfJar')
-
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'deobf'
+}
+
+task releaseJar(type: Jar){
+    from sourceSets.main.output
+    classifier = ''
+}
+reobf{
+    releaseJar
+}
+
+releaseJar.finalizedBy('reobfJar')
+
+tasks.build.dependsOn('deobfJar','releaseJar')
+
+artifacts{
+    archives releaseJar
+    archives deobfJar
 }
 
 /*
@@ -131,7 +150,7 @@ publishing {
     repositories {
         maven {
             name = githubprojectname
-            url = uri("https://maven.pkg.${viciousorglink}-${githubprojectname}")
+            url = uri("https://maven.pkg.${viciousorglink}/${githubprojectname}")
             credentials {
                 username = project.findProperty("gpr.user") ?: System.getenv("GPR_USER")
                 password = project.findProperty("gpr.key") ?: System.getenv("GPR_API_KEY")
@@ -140,9 +159,10 @@ publishing {
     }
     publications {
         gpr(MavenPublication) {
-            groupId = "com.${organization}"
-            artifactId = "${mainpackage}"
+            groupId = group
+            artifactId = mainpackage
             from components.java
+            artifact deobfJar
         }
     }
 }

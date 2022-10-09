@@ -6,19 +6,19 @@ import net.minecraftforge.eventbus.api.Cancelable;
 import net.minecraftforge.eventbus.api.Event;
 
 @Cancelable
-public class StatAwardedEvent extends Event {
-    private int award;
+public class StatChangedEvent extends Event {
+    private int change;
     private Stat<?> stat;
     private ServerPlayer player;
 
-    public StatAwardedEvent(int award, Stat<?> stat, ServerPlayer player){
-        this.award=award;
+    public StatChangedEvent(int change, Stat<?> stat, ServerPlayer player){
+        this.change=change;
         this.stat=stat;
         this.player=player;
     }
 
-    public int getAward(){
-        return award;
+    public int getChange(){
+        return change;
     }
     public Stat<?> getStat(){
         return stat;
