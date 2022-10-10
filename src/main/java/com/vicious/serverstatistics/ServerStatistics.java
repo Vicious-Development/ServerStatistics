@@ -7,6 +7,7 @@ import com.vicious.serverstatistics.common.storage.IStatData;
 import com.vicious.serverstatistics.common.storage.SyncableStatData;
 import com.vicious.viciouscore.common.data.implementations.attachable.SyncableGlobalData;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.AdvancementEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -28,12 +29,16 @@ public class ServerStatistics {
     public void onServerStarting(ServerStartingEvent event) {
         // Do something when the server starts
         LOGGER.info("Running Server Statistics.");
-        SyncableGlobalData.getInstance().executeAs(IStatData.class,(isd)->{
-            MinecraftForge.EVENT_BUS.register(isd.getStatData());
-        });
     }
     public static SyncableStatData getData(){
         IStatData dat = (IStatData) SyncableGlobalData.getInstance();
         return dat.getStatData();
+    }
+    @SubscribeEvent
+    public void advance(AdvancementEvent.AdvancementProgressEvent event){
+        //Ignore undisplayed advancements.
+        if(event.getAdvancement().getDisplay() != null) {
+            getData().advance(event);
+        }
     }
 }

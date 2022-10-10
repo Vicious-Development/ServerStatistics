@@ -10,7 +10,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stat;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.AdvancementEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.Set;
 import java.util.UUID;
@@ -34,18 +33,13 @@ public class SyncableStatData extends SyncableCompound {
         advancers.add(achievements);
         return achievements;
     }
-
-    @SubscribeEvent
-    public void achieve(AdvancementEvent.AdvancementEarnEvent event){
-        if(event.getEntity() instanceof ServerPlayer sp){
-            ensureExists(event.getAdvancement().getId()).achieve(sp,event.getAdvancement());
-        }
-    }
-    @SubscribeEvent
-    public void revoke(AdvancementEvent.AdvancementProgressEvent event){
-        if(event.getProgressType() == AdvancementEvent.AdvancementProgressEvent.ProgressType.REVOKE) {
-            if (event.getEntity() instanceof ServerPlayer sp) {
-                ensureExists(event.getAdvancement().getId()).revoke(sp,event.getAdvancement());
+    public void advance(AdvancementEvent.AdvancementProgressEvent event){
+        if(event.getEntity() instanceof ServerPlayer sp) {
+            if (event.getProgressType() == AdvancementEvent.AdvancementProgressEvent.ProgressType.REVOKE) {
+                ensureExists(event.getAdvancement().getId()).revoke(sp, event.getAdvancement());
+            }
+            if (event.getAdvancementProgress().isDone()) {
+                ensureExists(event.getAdvancement().getId()).achieve(sp,event.getAdvancement());
             }
         }
     }
