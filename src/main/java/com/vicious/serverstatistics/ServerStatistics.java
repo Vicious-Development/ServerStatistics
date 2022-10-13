@@ -35,7 +35,7 @@ public class ServerStatistics {
         return dat.getStatData();
     }
     @SubscribeEvent
-    public void advance(AdvancementEvent.AdvancementProgressEvent event){
+    public void advance(AdvancementEvent event){
         //Ignore undisplayed advancements.
         if(event.getAdvancement().getDisplay() != null) {
             getData().advance(event);

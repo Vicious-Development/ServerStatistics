@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "serverstatistics.refmap.json",
   "mixins": [
+    "MixinPlayerAdvancements",
     "MixinServerPlayer",
     "MixinSyncableGlobalData"
   ],

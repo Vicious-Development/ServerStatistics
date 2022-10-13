@@ -24,15 +24,16 @@ public class CPacketSendStats extends SSPacket {
     }
 
     public CPacketSendStats(FriendlyByteBuf buf) {
-        this.stats = buf.readMap(Object2IntOpenHashMap::new, (b) -> {
-            StatType<?> stattype = b.readById(Registry.STAT_TYPE);
-            return readStatCap(b, stattype);
+        this.stats = buf.readMap(Object2IntOpenHashMap::new, (buf2) -> {
+            int i = buf2.readVarInt();
+            int j = buf2.readVarInt();
+            return readStatCap(Registry.STAT_TYPE.byId(i), j);
         }, FriendlyByteBuf::readVarInt);
     }
 
     @Override
     public void toBytes(FriendlyByteBuf friendlyByteBuf) {
-        friendlyByteBuf.writeMap(this.stats, CPacketSendStats::writeStatCap, FriendlyByteBuf::writeVarInt);
+        friendlyByteBuf.writeMap(this.stats, this::writeStatCap, FriendlyByteBuf::writeVarInt);
     }
 
     @Override
@@ -51,12 +52,15 @@ public class CPacketSendStats extends SSPacket {
         });
     }
 
-    private static <T> Stat<T> readStatCap(FriendlyByteBuf p_237573_, StatType<T> p_237574_) {
-        return p_237574_.get(p_237573_.readById(p_237574_.getRegistry()));
+    private static <T> Stat<T> readStatCap(StatType<T> p_178596_, int p_178597_) {
+        return p_178596_.get(p_178596_.getRegistry().byId(p_178597_));
     }
 
-    private static <T> void writeStatCap(FriendlyByteBuf p_237570_, Stat<T> p_237571_) {
-        p_237570_.writeId(Registry.STAT_TYPE, p_237571_.getType());
-        p_237570_.writeId(p_237571_.getType().getRegistry(), p_237571_.getValue());
+    private <T> int getStatIdCap(Stat<T> p_178594_) {
+        return p_178594_.getType().getRegistry().getId(p_178594_.getValue());
+    }
+    private <T> void writeStatCap(FriendlyByteBuf p_237570_, Stat<T> p_237571_) {
+        p_237570_.writeVarInt(Registry.STAT_TYPE.getId(p_237571_.getType()));
+        p_237570_.writeVarInt(this.getStatIdCap(p_237571_));
     }
 }
