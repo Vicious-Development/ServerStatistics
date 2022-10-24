@@ -27,7 +27,7 @@ public abstract class SSPacket extends VCPacket{
                     SidedExecutor.clientOnly(()->pk.handle(ctx));
                 }
                 else if(pk.handleOnServer()){
-                    SidedExecutor.serverOnly(()->pk.handle(ctx));
+                    pk.handle(ctx);
                 }
                 ctx.get().setPacketHandled(true);
             }

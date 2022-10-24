@@ -10,6 +10,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.StatType;
 import net.minecraft.stats.StatsCounter;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -42,6 +44,7 @@ public class CPacketSendStats extends SSPacket {
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void handle(Supplier<NetworkEvent.Context> supplier) {
         Minecraft.getInstance().execute(()->{
             StatsCounter counter = new StatsCounter();
