@@ -1,10 +1,14 @@
 package com.vicious.serverstatistics.common.storage;
 
+import com.vicious.serverstatistics.common.event.ServerStatsResetEvent;
 import com.vicious.serverstatistics.common.event.StatChangedEvent;
 import com.vicious.viciouscore.aunotamation.isyncablecompoundholder.annotation.Obscured;
 import com.vicious.viciouscore.aunotamation.isyncablecompoundholder.annotation.ReadOnly;
+import com.vicious.viciouscore.common.data.DataAccessor;
+import com.vicious.viciouscore.common.data.implementations.SyncableArrayHashSet;
 import com.vicious.viciouscore.common.data.implementations.SyncableDataTable;
 import com.vicious.viciouscore.common.data.structures.SyncableCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stat;
@@ -17,12 +21,24 @@ import java.util.UUID;
 public class SyncableStatData extends SyncableCompound {
     @Obscured
     public SyncableDataTable<AdvancementData> advancers = new SyncableDataTable<>("achievers", AdvancementData::new);
+    @Obscured
+    public SyncableArrayHashSet<Participant> participants = new SyncableArrayHashSet<>("participants",Participant::new);
     @ReadOnly
     public SyncableStatsCounter counter = new SyncableStatsCounter("stats");
 
     public SyncableStatData(String key) {
         super(key);
         advancers.supports(AdvancementData::getKey,ResourceLocation.class);
+    }
+
+    @Override
+    public void deserializeNBT(CompoundTag tag, DataAccessor sender) {
+        super.deserializeNBT(tag, sender);
+        if(participants.value.isEmpty()){
+            advancers = new SyncableDataTable<>("achievers", AdvancementData::new);
+            counter = new SyncableStatsCounter("stats");
+            MinecraftForge.EVENT_BUS.post(new ServerStatsResetEvent());
+        }
     }
 
     private AdvancementData ensureExists(ResourceLocation rl){
