@@ -1,5 +1,6 @@
 package com.vicious.serverstatistics.common.storage;
 
+import com.vicious.serverstatistics.common.event.ForgeARE;
 import com.vicious.serverstatistics.common.event.ServerStatsResetEvent;
 import com.vicious.serverstatistics.common.event.StatChangedEvent;
 import com.vicious.viciouscore.aunotamation.isyncablecompoundholder.annotation.Obscured;
@@ -48,12 +49,12 @@ public class SyncableStatData extends SyncableCompound {
         advancers.add(achievements);
         return achievements;
     }
-    public void advance(AdvancementEvent.AdvancementProgressEvent event){
+    public void advance(AdvancementEvent event){
         if(event.getEntity() instanceof ServerPlayer sp) {
-            if (event.getProgressType() == AdvancementEvent.AdvancementProgressEvent.ProgressType.REVOKE) {
+            if (event instanceof ForgeARE) {
                 ensureExists(event.getAdvancement().getId()).revoke(sp, event.getAdvancement());
             }
-            if (event.getAdvancementProgress().isDone()) {
+            else {
                 ensureExists(event.getAdvancement().getId()).achieve(sp,event.getAdvancement());
             }
         }

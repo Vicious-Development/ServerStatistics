@@ -57,7 +57,7 @@ public class ServerStatistics {
                 advancements.forEach((a,v)->{
                     if(v.isDone()) {
                         if (a.getDisplay() != null) {
-                            getData().advance(new AdvancementEvent.AdvancementProgressEvent(sp, a, v, null, AdvancementEvent.AdvancementProgressEvent.ProgressType.GRANT));
+                            getData().advance(new AdvancementEvent(sp, a));
                         }
                     }
                 });
