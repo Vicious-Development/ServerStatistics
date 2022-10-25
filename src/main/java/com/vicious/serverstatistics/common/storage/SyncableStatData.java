@@ -5,8 +5,8 @@ import com.vicious.serverstatistics.common.event.StatChangedEvent;
 import com.vicious.viciouscore.aunotamation.isyncablecompoundholder.annotation.Obscured;
 import com.vicious.viciouscore.aunotamation.isyncablecompoundholder.annotation.ReadOnly;
 import com.vicious.viciouscore.common.data.DataAccessor;
-import com.vicious.viciouscore.common.data.implementations.SyncableArrayHashSet;
 import com.vicious.viciouscore.common.data.implementations.SyncableDataTable;
+import com.vicious.viciouscore.common.data.implementations.SyncableList;
 import com.vicious.viciouscore.common.data.structures.SyncableCompound;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -22,7 +22,7 @@ public class SyncableStatData extends SyncableCompound {
     @Obscured
     public SyncableDataTable<AdvancementData> advancers = new SyncableDataTable<>("achievers", AdvancementData::new);
     @Obscured
-    public SyncableArrayHashSet<Participant> participants = new SyncableArrayHashSet<>("participants",Participant::new);
+    public SyncableList<Participant> participants = new SyncableList<>("participants",Participant::new);
     @ReadOnly
     public SyncableStatsCounter counter = new SyncableStatsCounter("stats");
 
@@ -35,8 +35,7 @@ public class SyncableStatData extends SyncableCompound {
     public void deserializeNBT(CompoundTag tag, DataAccessor sender) {
         super.deserializeNBT(tag, sender);
         if(participants.value.isEmpty()){
-            advancers = new SyncableDataTable<>("achievers", AdvancementData::new);
-            counter = new SyncableStatsCounter("stats");
+            counter.value.stats.clear();
             MinecraftForge.EVENT_BUS.post(new ServerStatsResetEvent());
         }
     }
