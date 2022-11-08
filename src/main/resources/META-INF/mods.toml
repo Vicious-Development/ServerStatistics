@@ -24,6 +24,6 @@ Combines the statistics and advancements of ALL players into one global statisti
 [[dependencies.serverstatistics]]
    modId="viciouscore"
    mandatory=true
-   versionRange="[1.19.2-4.3.1,)"
+   versionRange="[1.19.2-4.4.7,)"
    ordering="AFTER"
    side="BOTH"

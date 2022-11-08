@@ -51,7 +51,7 @@ public class ServerStatistics {
     @SubscribeEvent
     public void onLogin(PlayerEvent.PlayerLoggedInEvent loginEvent){
         if(loginEvent.getEntity() instanceof ServerPlayer sp){
-            if(!getData().participants.value.contains(new Participant(sp.getUUID()))){
+            if(!getData().participants.containsKey(sp.getUUID())){
                 getData().participants.value.add(new Participant(sp.getUUID()));
                 Map<Advancement, AdvancementProgress> advancements = sp.getAdvancements().advancements;
                 advancements.forEach((a,v)->{
