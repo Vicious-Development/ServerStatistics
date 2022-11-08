@@ -6,7 +6,7 @@ import com.vicious.serverstatistics.common.network.SSNetwork;
 import com.vicious.serverstatistics.common.storage.IStatData;
 import com.vicious.serverstatistics.common.storage.Participant;
 import com.vicious.serverstatistics.common.storage.SyncableStatData;
-import com.vicious.viciouscore.common.data.implementations.attachable.SyncableGlobalData;
+import com.vicious.viciouscore.common.data.GlobalData;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.server.level.ServerPlayer;
@@ -38,7 +38,7 @@ public class ServerStatistics {
         LOGGER.info("Running Server Statistics.");
     }
     public static SyncableStatData getData(){
-        IStatData dat = (IStatData) SyncableGlobalData.getInstance();
+        IStatData dat = (IStatData) GlobalData.getGlobalData();
         return dat.getStatData();
     }
     @SubscribeEvent
