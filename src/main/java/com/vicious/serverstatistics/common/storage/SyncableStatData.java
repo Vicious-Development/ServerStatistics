@@ -7,7 +7,6 @@ import com.vicious.viciouscore.aunotamation.isyncablecompoundholder.annotation.O
 import com.vicious.viciouscore.aunotamation.isyncablecompoundholder.annotation.ReadOnly;
 import com.vicious.viciouscore.common.data.DataAccessor;
 import com.vicious.viciouscore.common.data.implementations.SyncableDataTable;
-import com.vicious.viciouscore.common.data.implementations.SyncableList;
 import com.vicious.viciouscore.common.data.structures.SyncableCompound;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -23,19 +22,20 @@ public class SyncableStatData extends SyncableCompound {
     @Obscured
     public SyncableDataTable<AdvancementData> advancers = new SyncableDataTable<>("achievers", AdvancementData::new);
     @Obscured
-    public SyncableList<Participant> participants = new SyncableList<>("participants",Participant::new);
+    public SyncableDataTable<Participant> participants = new SyncableDataTable<>("participants",Participant::new);
     @ReadOnly
     public SyncableStatsCounter counter = new SyncableStatsCounter("stats");
 
     public SyncableStatData(String key) {
         super(key);
         advancers.supports(AdvancementData::getKey,ResourceLocation.class);
+        participants.supports(Participant::getUUID,UUID.class);
     }
 
     @Override
     public void deserializeNBT(CompoundTag tag, DataAccessor sender) {
         super.deserializeNBT(tag, sender);
-        if(participants.value.isEmpty()){
+        if(participants.size() == 0){
             counter.value.stats.clear();
             MinecraftForge.EVENT_BUS.post(new ServerStatsResetEvent());
         }

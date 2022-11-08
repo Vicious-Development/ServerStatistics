@@ -1,5 +1,5 @@
 modLoader="javafml" #mandatory
-loaderVersion="[40,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+loaderVersion="[43,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
 license="All Rights Reserved"
 [[mods]] #mandatory
 modId="serverstatistics" #mandatory
@@ -12,18 +12,18 @@ Combines the statistics and advancements of ALL players into one global statisti
 [[dependencies.serverstatistics]] #optional
    modId="forge" #mandatory
    mandatory=true #mandatory
-   versionRange="[40,)" #mandatory
+   versionRange="[43,)" #mandatory
    ordering="NONE"
    side="BOTH"
 [[dependencies.serverstatistics]]
    modId="minecraft"
    mandatory=true
-   versionRange="[1.18.2,1.19)"
+   versionRange="[1.19.2,1.20)"
    ordering="NONE"
    side="BOTH"
 [[dependencies.serverstatistics]]
    modId="viciouscore"
    mandatory=true
-   versionRange="[1.18.2-4.3.1,)"
+   versionRange="[1.19.2-4.3.1,)"
    ordering="AFTER"
    side="BOTH"
