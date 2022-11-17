@@ -1,5 +1,13 @@
 # ServerStatistics
  Adds a Server Statistics system that combines all player stats together.
+
+# Useful events for developers:
+
+StatChangedEvent - Sent when a server statistic changes.
+AdvancedFirstTimeEvent - Sent when an advancement is earned for the first time on the entire server.
+AdvancementCompletelyRevokedEvent - Sent when all players who had an advancement had it revoked. This is usually only happens when a command is ran to do so.
+ServerStatsResetEvent - This is sent when the server stats data cache is reset. Accounting for this is not necessary unless your mod used ServerStats before version 1.1.8
+
 # Using as a Gradle Dependency
 1. Put this in your build script
 ```gradle
