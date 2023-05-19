@@ -1,6 +1,7 @@
 package com.vicious.serverstatistics;
 
 import com.mojang.logging.LogUtils;
+import com.vicious.serverstatistics.common.IAdvancements;
 import com.vicious.serverstatistics.common.SSCommands;
 import com.vicious.serverstatistics.common.network.SSNetwork;
 import com.vicious.serverstatistics.common.storage.IStatData;
@@ -53,7 +54,7 @@ public class ServerStatistics {
         if(loginEvent.getEntity() instanceof ServerPlayer sp){
             if(!getData().participants.containsKey(sp.getUUID())){
                 getData().participants.value.add(new Participant(sp.getUUID()));
-                Map<Advancement, AdvancementProgress> advancements = sp.getAdvancements().advancements;
+                Map<Advancement, AdvancementProgress> advancements = ((IAdvancements)sp.getAdvancements()).getProgress();
                 advancements.forEach((a,v)->{
                     if(v.isDone()) {
                         if (a.getDisplay() != null) {

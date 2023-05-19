@@ -6,7 +6,8 @@
   "refmap": "serverstatistics.refmap.json",
   "mixins": [
     "MixinServerPlayer",
-    "MixinSyncableGlobalData"
+    "MixinSyncableGlobalData",
+    "MixinServerPlayer"
   ],
   "client": [
   ],
